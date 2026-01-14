@@ -1,24 +1,24 @@
 {
-    "fileName": "REVLib.json",
-    "name": "REVLib",
+    "fileName": "LumynLabs-2026.0.0.json",
+    "name": "LumynLabs",
     "version": "2026.0.0",
     "frcYear": "2026",
-    "uuid": "3f48eb8c-50fe-43a6-9cb7-44c86353c4cb",
+    "uuid": "eebd34fc-a6d3-48a2-a286-ac1cec59ab89",
     "mavenUrls": [
-        "https://maven.revrobotics.com/"
+        "https://packages.lumynlabs.com/repo"
     ],
-    "jsonUrl": "https://software-metadata.revrobotics.com/REVLib-2026.json",
+    "jsonUrl": "https://packages.lumynlabs.com/LumynLabs.json",
     "javaDependencies": [
         {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "REVLib-java",
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-java",
             "version": "2026.0.0"
         }
     ],
     "jniDependencies": [
         {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "REVLib-driver",
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-driver",
             "version": "2026.0.0",
             "skipInvalidPlatforms": true,
             "isJar": false,
@@ -32,23 +32,8 @@
             ]
         },
         {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "RevLibBackendDriver",
-            "version": "2026.0.0",
-            "skipInvalidPlatforms": true,
-            "isJar": false,
-            "validPlatforms": [
-                "windowsx86-64",
-                "linuxarm64",
-                "linuxx86-64",
-                "linuxathena",
-                "linuxarm32",
-                "osxuniversal"
-            ]
-        },
-        {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "RevLibWpiBackendDriver",
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-common",
             "version": "2026.0.0",
             "skipInvalidPlatforms": true,
             "isJar": false,
@@ -64,44 +49,11 @@
     ],
     "cppDependencies": [
         {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "REVLib-cpp",
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-cpp",
             "version": "2026.0.0",
-            "libName": "REVLib",
+            "libName": "Lumyn",
             "headerClassifier": "headers",
-            "sharedLibrary": false,
-            "skipInvalidPlatforms": true,
-            "binaryPlatforms": [
-                "windowsx86-64",
-                "linuxarm64",
-                "linuxx86-64",
-                "linuxathena",
-                "linuxarm32",
-                "osxuniversal"
-            ]
-        },
-        {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "REVLib-driver",
-            "version": "2026.0.0",
-            "libName": "REVLibDriver",
-            "headerClassifier": "headers",
-            "sharedLibrary": false,
-            "skipInvalidPlatforms": true,
-            "binaryPlatforms": [
-                "windowsx86-64",
-                "linuxarm64",
-                "linuxx86-64",
-                "linuxathena",
-                "linuxarm32",
-                "osxuniversal"
-            ]
-        },
-        {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "RevLibBackendDriver",
-            "version": "2026.0.0",
-            "libName": "BackendDriver",
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
@@ -114,10 +66,28 @@
             ]
         },
         {
-            "groupId": "com.revrobotics.frc",
-            "artifactId": "RevLibWpiBackendDriver",
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-driver",
             "version": "2026.0.0",
-            "libName": "REVLibWpi",
+            "libName": "LumynDriver",
+            "headerClassifier": "headers",
+            "sharedLibrary": true,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "windowsx86-64",
+                "linuxarm64",
+                "linuxx86-64",
+                "linuxathena",
+                "linuxarm32",
+                "osxuniversal"
+            ]
+        },
+        {
+            "groupId": "com.lumynlabs.frc",
+            "artifactId": "LumynLabs-common",
+            "version": "2026.0.0",
+            "libName": "LumynCommon",
+            "headerClassifier": "headers",
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
