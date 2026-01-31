@@ -2,12 +2,12 @@
   "drive": {
     "type": "sparkflex_vortex",
     "id": 3,
-    "canbus": null
+    "canbus": "rio"
   },
   "angle": {
     "type": "sparkmax_neo",
     "id": 7,
-    "canbus": null
+    "canbus": "rio"
   },
   "encoder": {
     "type": "canandmag",
@@ -15,10 +15,10 @@
     "canbus": null
   },
   "inverted": {
-    "drive": true,
+    "drive": false,
     "angle": false
   },
-  "absoluteEncoderOffset": 139.9105,
+  "absoluteEncoderOffset": 15.810303,
   "location": {
     "front":10.5,
     "left": -10.5
