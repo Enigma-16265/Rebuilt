@@ -23,9 +23,15 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
+import frc.robot.subsystems.Intake.Position;
+import frc.robot.subsystems.Intake.Speed;
 import frc.robot.Constants.KrakenX60;
 
 public class Intake extends SubsystemBase
@@ -71,6 +77,8 @@ public class Intake extends SubsystemBase
     private final VoltageOut pivotVoltageRequest = new VoltageOut(0);
     private final MotionMagicVoltage pivotMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
+
+    private boolean isHomed = false;
 
     public Intake()
     {
@@ -136,6 +144,77 @@ public class Intake extends SubsystemBase
         final Angle currentPosition = pivotMotor.getPosition().getValue();
         final Angle targetPosition = pivotMotionMagicRequest.getPositionMeasure();
         return currentPosition.isNear(targetPosition, kPositionTolerance);
+    }
+
+    private void setPivotPercentOutput(double percentOutput) {
+        pivotMotor.setControl(
+            pivotVoltageRequest
+                .withOutput(Volts.of(percentOutput * 12.0))
+        );
+    }
+
+    public void set(Position position) {
+        pivotMotor.setControl(
+            pivotMotionMagicRequest
+                .withPosition(position.angle())
+        );
+    }
+
+    public void set(Speed speed) {
+        rollerMotor.setControl(
+            rollerVoltageRequest
+                .withOutput(speed.voltage())
+        );
+    }
+
+    public Command intakeCommand() {
+        return startEnd(
+            () -> {
+                set(Position.INTAKE);
+                set(Speed.INTAKE);
+            },
+            () -> set(Speed.STOP)
+        );
+    }
+
+    public Command agitateCommand() {
+        return runOnce(() -> set(Speed.INTAKE))
+            .andThen(
+                Commands.sequence(
+                    runOnce(() -> set(Position.AGITATE)),
+                    Commands.waitUntil(this::isPositionWithinTolerance),
+                    runOnce(() -> set(Position.INTAKE)),
+                    Commands.waitUntil(this::isPositionWithinTolerance)
+                )
+                .repeatedly()
+            )
+            .handleInterrupt(() -> {
+                set(Position.INTAKE);
+                set(Speed.STOP);
+            });
+    }
+
+    public Command homingCommand() {
+        return Commands.sequence(
+            runOnce(() -> setPivotPercentOutput(0.1)),
+            Commands.waitUntil(() -> pivotMotor.getSupplyCurrent().getValue().in(Amps) > 6),
+            runOnce(() -> {
+                pivotMotor.setPosition(Position.HOMED.angle());
+                isHomed = true;
+                set(Position.STOWED);
+            })
+        )
+        .unless(() -> isHomed)
+        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+        builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
+        builder.addDoubleProperty("RPM", () -> rollerMotor.getVelocity().getValue().in(RPM), null);
+        builder.addDoubleProperty("Pivot Supply Current", () -> pivotMotor.getSupplyCurrent().getValue().in(Amps), null);
+        builder.addDoubleProperty("Roller Supply Current", () -> rollerMotor.getSupplyCurrent().getValue().in(Amps), null);
     }
 
 }
