@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.Limelight;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -38,6 +40,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
+  private final Limelight cameraInstance = new Limelight();
 
   // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -176,6 +179,7 @@ public class RobotContainer
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
       driverXbox.leftBumper().onTrue(Commands.none());
       driverXbox.rightBumper().onTrue(Commands.none());
+      //driverXbox.b().whileTrue(Commands.runOnce(drivebase.setChassisSpeeds(drivebase.getTargetSpeeds(0.5,0.0,0.0,0.0)),drivebase));
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -183,6 +187,7 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
+      driverXbox.b().whileTrue(Commands.runOnce(drivebase::limelightTest, drivebase));
     }
 
   }
