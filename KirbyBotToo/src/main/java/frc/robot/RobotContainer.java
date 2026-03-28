@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -48,7 +49,7 @@ public class RobotContainer {
 
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     
-    private final CommandXboxController driver = new CommandXboxController(0);
+    private final CommandPS5Controller driver = new CommandPS5Controller(0);
 
     private final AutoRoutines autoRoutines = new AutoRoutines(
         swerve,
@@ -96,10 +97,10 @@ public class RobotContainer {
             .onTrue(intake.homingCommand())
             .onTrue(hanger.homingCommand());
 
-        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
-        driver.leftTrigger().whileTrue(intake.intakeCommand());
-        driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        driver.R2().whileTrue(subsystemCommands.aimAndShoot());     // rightTrigger
+        driver.R1().whileTrue(subsystemCommands.shootManually());   // rightBumper
+        driver.L2().whileTrue(intake.intakeCommand());              // leftTrigger
+        driver.L1().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED))); // leftBumper
 
         driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
@@ -113,11 +114,13 @@ public class RobotContainer {
             () -> -driver.getRightX()
         );
         swerve.setDefaultCommand(manualDriveCommand);
-        driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+
+        // Xbox → PS5 equivalent mapping
+        driver.cross().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));   // A
+        driver.circle().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg))); // B
+        driver.square().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg))); // X
+        driver.triangle().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));   // Y
+        driver.options().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric())); // back → options
     }
 
     private Command updateVisionCommand() {
