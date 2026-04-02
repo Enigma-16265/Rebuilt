@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class SwerveTelemetry {
     private final double MaxSpeed;
-    private final Field2d field = new Field2d();
+    //private final Field2d field = new Field2d();
 
     /**
      * Construct a telemetry object, with the specified max speed of the robot
@@ -31,7 +31,7 @@ public class SwerveTelemetry {
      */
     public SwerveTelemetry(double maxSpeed) {
         MaxSpeed = maxSpeed;
-        SmartDashboard.putData("Field", field);
+        //SmartDashboard.putData("Field", field);
 
         /* Set up the module state Mechanism2d telemetry */
         for (int i = 0; i < 4; ++i) {
@@ -88,7 +88,7 @@ public class SwerveTelemetry {
     /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
     public void telemeterize(SwerveDriveState state) {
 
-        field.setRobotPose(state.Pose);
+        //field.setRobotPose(state.Pose);
 
         /* Telemeterize the swerve drive state */
         drivePose.set(state.Pose);
