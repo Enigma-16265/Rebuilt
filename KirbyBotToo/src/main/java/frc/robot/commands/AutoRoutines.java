@@ -36,6 +36,7 @@ public final class AutoRoutines {
     private final Limelight limelight;
 
     private final SubsystemCommands subsystemCommands;
+    private final SimpleAuto simpleAuto;
 
     private final AutoFactory autoFactory;
     private final AutoChooser autoChooser;
@@ -60,12 +61,14 @@ public final class AutoRoutines {
         this.limelight = limelight;
 
         this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
+        this.simpleAuto = new SimpleAuto(swerve, intake, floor, feeder, shooter, hood, hanger);
 
         this.autoFactory = swerve.createAutoFactory();
         this.autoChooser = new AutoChooser();
     }
 
     public void configure() {
+        autoChooser.addCmd("Simple Auto", simpleAuto::command);
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
