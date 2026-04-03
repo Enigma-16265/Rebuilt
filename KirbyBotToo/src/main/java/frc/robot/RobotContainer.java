@@ -96,7 +96,7 @@ public class RobotContainer {
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
             .onTrue(intake.homingCommand());
 
-        driver.R2().whileTrue(subsystemCommands.aimAndShoot());     // rightTrigger
+        // driver.R2().whileTrue(subsystemCommands.aimAndShoot());     // rightTrigger
         driver.R1().whileTrue(subsystemCommands.shootManually());   // rightBumper
         driver.L2().whileTrue(intake.intakeCommand());              // leftTrigger
         driver.L1().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED))); // leftBumper
