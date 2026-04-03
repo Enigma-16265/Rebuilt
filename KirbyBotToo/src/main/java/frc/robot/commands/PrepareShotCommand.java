@@ -31,10 +31,14 @@ public class PrepareShotCommand extends Command {
             )
     );
 
+    static final double shootDistanceNearRPM = 3500; //2800
+    static final double shootDistanceMidRPM  = 4093; //3275
+    static final double shootDistanceFarRPM  = 4562; //3650
+
     static {
-        distanceToShotMap.put(Inches.of(52.0), new Shot(2800, 0.19));
-        distanceToShotMap.put(Inches.of(114.4), new Shot(3275, 0.40));
-        distanceToShotMap.put(Inches.of(165.5), new Shot(3650, 0.48));
+        distanceToShotMap.put(Inches.of(52.0), new Shot(shootDistanceNearRPM, 0.19));
+        distanceToShotMap.put(Inches.of(114.4), new Shot(shootDistanceMidRPM, 0.40));
+        distanceToShotMap.put(Inches.of(165.5), new Shot(shootDistanceFarRPM, 0.48));
     }
 
     private final Shooter shooter;
