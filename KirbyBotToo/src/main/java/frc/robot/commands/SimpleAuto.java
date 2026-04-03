@@ -47,7 +47,6 @@ public final class SimpleAuto {
 
     public Command command() {
         return Commands.sequence(
-            driveForward(),
             subsystemCommands.aimAndShoot().withTimeout(kShootTimeout.in(Seconds))
         ).withName("SimpleAuto");
     }
