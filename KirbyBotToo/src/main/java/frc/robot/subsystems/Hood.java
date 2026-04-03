@@ -86,5 +86,6 @@ public class Hood extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Current Position", () -> currentPosition, null);
         builder.addDoubleProperty("Target Position", () -> targetPosition, value -> setPosition(value));
+        builder.addBooleanProperty("At Target Position", this::isPositionWithinTolerance, null);
     }
 }
