@@ -20,8 +20,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public final class SimpleAuto {
-    private static final LinearVelocity kForwardSpeed = MetersPerSecond.of(1.0);
-    private static final Time kDriveTime = Seconds.of(2.0);
+    private static final LinearVelocity kForwardSpeed = MetersPerSecond.of(-0.5);
+    private static final Time kDriveTime = Seconds.of(1);
     private static final Time kShootTimeout = Seconds.of(5.0);
 
     private final Swerve swerve;
@@ -31,6 +31,8 @@ public final class SimpleAuto {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withSteerRequestType(SteerRequestType.MotionMagicExpo);
     private final SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
+
+    private final Intake intake;
 
     public SimpleAuto(
         Swerve swerve,
@@ -43,10 +45,14 @@ public final class SimpleAuto {
     ) {
         this.swerve = swerve;
         this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
+        this.intake = intake;
     }
 
     public Command command() {
         return Commands.sequence(
+            Commands.runOnce(() -> swerve.resetPose(swerve.getState().Pose), swerve),
+            driveForward(),
+            intake.intakeCommand(),
             subsystemCommands.aimAndShoot().withTimeout(kShootTimeout.in(Seconds))
         ).withName("SimpleAuto");
     }
